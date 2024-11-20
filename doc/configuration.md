@@ -126,9 +126,9 @@ type of provider.
 
 #### Common parameters
 
-| Parameter     | Description                                                 |
-| ------------- | ----------------------------------------------------------- |
-| `type`        | The type of provider: `twilio`, `signalwire`, or `nexmo`.   |
+| Parameter     | Description                                                         |
+| ------------- | ------------------------------------------------------------------- |
+| `type`        | The type of provider: `twilio`, `signalwire`, `nexmo` or `aaisp`.   |
 
 #### Twilio-specific parameters
 
@@ -237,6 +237,43 @@ Replace:
 * `PROVIDER_NAME` with the name of the provider.
 
 Example webhook URL: `http://nexmo:5VKFT8pByMkO6IG6@example.com:8080/work/message`
+
+Note: if you have placed sms-over-xmpp behind a reverse proxy, be sure to adjust
+the URL accordingly.
+
+#### AAISP-specific parameters
+
+| Parameter       | Description |
+| --------------- | ----------- |
+| `username`      | This is the phone number as shown on the control pages for your VoIP number in full international format with no spaces |
+| `password`      | The corresponding outgoing password for the username as set in the control pages for your VoIP number |
+| `http_password` | A password, chosen by you, that AAISP must use when executing the webhook for incoming SMSes |
+
+Example config file for AAISP:
+
+```
+type          aaisp
+username      +447584938989
+password      hunter1
+http_password hyQpFyppmu9V
+```
+
+#### AAISP webhook configuration
+
+You must configure your VoIP number in the control pages to
+invoke a webhook when you receive an incoming SMS.  The URL
+of the webhook follows this template:
+
+`https://aaisp:HTTP_PASSWORD@HOSTNAME:PORT/PROVIDER_NAME/inbound-sms`
+
+
+Replace:
+
+* `HTTP_PASSWORD` with the password specified to the `http_password` parameter.
+* `HOSTNAME:PORT` with the public hostname and port number of your sms-over-xmpp server.
+* `PROVIDER_NAME` with the name of the provider.
+
+Example webhook URL: `http://aaisp:5VKFT8pByMkO6IG6@example.com:8080/work/message`
 
 Note: if you have placed sms-over-xmpp behind a reverse proxy, be sure to adjust
 the URL accordingly.
